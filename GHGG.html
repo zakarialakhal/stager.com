@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="salle.css">
+</head>
+<style>
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        padding: 25px;
+        border-radius: 6px;
+        font-family: Arial, sans-serif;
+      background-color: rgb(54, 8, 54);
+    }
+    .form {
+        padding: 25px;
+        border-radius: 6px;
+        background-color:transparent;
+        border: 2px solid rgba(255, 255,255, 255);
+        backdrop-filter:blur(15px);
+    
+    }
+    .form form {
+        display: flex;
+        width: 350px;
+        flex-direction: column;
+    }
+    h2 {
+        margin: 10px 0;
+        font-weight: 500;
+        color: rgb(254, 252, 246);
+    }
+    .erreur_message {
+        color: red;
+        font-size: 12px;
+    }
+    label {
+        margin-top: 20px;
+        color: rgb(233, 230, 223);
+    }
+    input{
+        padding: 5px;
+        border: 1px solid #999;
+        outline: 0;
+        margin-top: 20px;
+        border-radius: 6px;
+    }
+    input[type="submit"]{
+        margin-top: 25px;
+        
+        border: none;
+        cursor: pointer;
+        color: #fff;
+    }
+    
+</style>
+<body>
+<?php
+    if(isset($_POST['button'])){
+        extract($_POST);
+        if(empty($adresse) || empty($tele) || empty($ville)){
+            $message = "Please fill in all fields!";
+        } else {
+            include_once "connexion.php";
+            $req = mysqli_query($con , "INSERT INTO salle (id_salle,adrs_salle, tele_salle, ville) 
+                VALUES (NULL, '$adresse', '$tele', '$ville')");
+            if($req){
+                header("location: salle.php");
+            } else {
+                $message = "Failed to add salle.";
+            }
+        }
+    }
+    ?>
+    <div class="form">
+        <h2>Add salle</h2>
+        <p class="erreur_message">
+            <?php 
+            if(isset($message)){
+                echo $message;
+            }
+            ?>
+            <form method="POST" action="">
+            <label>entrer l'adresse de salle:</label>
+            <input type="text" name="adresse">
+            <label>entrer telephone:</label>
+            <input type="number" name="tele">
+      
+           
+        </form>
+</body>
+</html>
